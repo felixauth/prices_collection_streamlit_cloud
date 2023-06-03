@@ -1,1 +1,0 @@
-py scripts/app.py

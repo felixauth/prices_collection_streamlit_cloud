@@ -1,5 +1,5 @@
 from html_collection import html_collection, prices_collection
-from params import params
+from params import params, import_brands, import_output_path
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -8,8 +8,26 @@ import sys
 from utils import clean_path
 from datetime import date
 import os
+from tqdm import tqdm
+
 
 def launch_html_collection(websites, marques, input_df):
+
+    """
+    Function that loops over each website and brands and collect the html content at each iteration using Selenium for Google Chrome
+
+    Parameters
+    ----------
+    websites : list of the website names
+    marques : list of the brands
+    input_df : dataframe from parameters
+
+    Returns
+    -------
+    A dataframe with the name of the website, name of the brand and the html content
+    
+    """
+
 
     s = Service('chromedriver.exe')
     chromeOptions = Options()
@@ -33,7 +51,7 @@ def launch_html_collection(websites, marques, input_df):
 
     soup_df = pd.DataFrame()
 
-    for website in websites:
+    for website in tqdm(websites):
         print("\n", f"---------------------- Extracting data from {website.upper()} -------------------------", "\n")
         for marque in marques :
             soup_df = html_collection(website, marque, input_df, soup_df, driver)
@@ -46,7 +64,17 @@ def launch_html_collection(websites, marques, input_df):
 
 def save_data(data, path):
     """
-    Save the soup_df
+    Function that saves the output to a specific folder
+
+    Parameters
+    ----------
+    data : dataframe to be saved
+    path : path of the folder where to save the data
+
+    Returns
+    -------
+    nothing
+
     """
     path = clean_path(path)
 
@@ -58,10 +86,10 @@ def save_data(data, path):
 if __name__ =="__main__":
 
     #Choice of websites
-    websites = ["manutan","bruneau","jpg","raja","bernard"]
+    websites = ["bruneau","manutan","jpg","raja","bernard"] #"manutan","bruneau","jpg","raja","bernard"
 
     #Choice of brands
-    marques = ["TORK","JEX","ST MARC","HARPIC","AJAX","ROSSIGNOL","ANSELL","BLAKLADER"]
+    marques = import_brands()
 
     #Importing params
     input_df = params()
@@ -74,10 +102,10 @@ if __name__ =="__main__":
 
     #Adding the date of the extraction
     today = date.today().strftime("%Y-%m-%d")
-    collect_df.insert(0, 'Extraction_Date', today)
+    collect_df.insert(0, 'Date_extraction', today)
 
     #Saving data to the repository chosen by the user
-    file_path = str(sys.argv[1])
+    file_path = import_output_path()
     file_name = f"{today}_Extract.xlsx"
     path = os.path.join(file_path,file_name) #Concatenating the path of the folder and the name of the file
     save_data(collect_df, path)

@@ -9,7 +9,7 @@ from utils import clean_prices
 
 def html_collection(website, marque, input_df, soup_df, driver):
     """
-    Function that stores the html code for each website and each brand
+    Function that stores the html code for each website and each brand in a dataframe
 
     Parameters
     ----------
@@ -21,7 +21,7 @@ def html_collection(website, marque, input_df, soup_df, driver):
 
     Returns
     -------
-    A dataframe with the website, brand and html content
+    A dataframe with the name of the website, name of the brand and the html content
     
     """
     
@@ -32,6 +32,8 @@ def html_collection(website, marque, input_df, soup_df, driver):
     if website == "manutan":
         marque = marque.replace(" ","+")
         query=input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, max_product=0)
+    elif website == "bruneau":
+        query=input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, num_page=1)
     else:
         query=input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque)
 
@@ -77,6 +79,31 @@ def html_collection(website, marque, input_df, soup_df, driver):
                                                      "marque": marque,
                                                      "html_content": html_by_page},index=list(range(len(html_by_page))))]).reset_index(drop=True)
 
+    elif website == "bruneau":
+        
+        html_by_page = []
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+        html_by_page.append(soup)
+        match_html = soup.find("h1",class_="isg-titre-camingo")
+        if match_html:
+            match = match_html.text
+            nb_results = int(re.search(r'(\d+)\s+', match).group(0))
+            n_resuls_by_page = 48
+            if nb_results > n_resuls_by_page :
+                nb_pages = int(nb_results / n_resuls_by_page) + 1
+                for nb_page in range(2,nb_pages + 1):
+                    query = input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, num_page=nb_page)    
+                    driver.get(query)
+                    try:
+                        driver.find_element(By.XPATH,input_df.loc[input_df["website"]==website,"xpath_cookies_accept"].values[0]).click()
+                    except NoSuchElementException:
+                        pass
+                    soup = BeautifulSoup(driver.page_source, 'html.parser')
+                    html_by_page.append(soup)
+
+        soup_df = pd.concat([soup_df, pd.DataFrame({"website": website,
+                                                    "marque": marque,
+                                                    "html_content": html_by_page},index=list(range(len(html_by_page))))]).reset_index(drop=True)
     else:
         e = True
         while e == True:
@@ -98,6 +125,20 @@ def html_collection(website, marque, input_df, soup_df, driver):
     return soup_df
 
 def prices_collection(soup_df, input_df):
+
+    """
+    Function that extract information from html content
+
+    Parameters
+    ----------
+    soup_df : dataframe with the name of the website, name of the brand and html content
+    input_df : dataframe with html location of information wanted for each type of information and each website
+
+    Returns
+    -------
+    A dataframe with the name of the website, name of the brand, the product name, the product reference and the product price
+    
+    """
 
     results_df = pd.DataFrame()
 

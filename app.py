@@ -32,6 +32,8 @@ with st.echo():
     driver = get_driver()
     
     soup_df = pd.DataFrame()
+    input_df = params()
+
     soup_df = html_collection("manutan", "TORK", input_df, soup_df, driver)
 #     driver.get("https://www.bernard.fr/")
 

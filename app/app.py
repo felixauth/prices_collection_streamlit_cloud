@@ -4,6 +4,7 @@ from params import params
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 from tqdm import tqdm
 
@@ -26,10 +27,16 @@ def launch_html_collection(websites, marques, input_df):
     """
 
 
-    s = Service('chromedriver.exe')
+    # s = Service('chromedriver.exe')
+
+    @st.experimental_singleton
+    def get_driver():
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chromeOptions)
+
     chromeOptions = Options()
 
     chromeOptions.add_argument("--headless")
+    chromeOptions.add_argument('--disable-gpu')
     chromeOptions.add_argument("--blink-settings=imagesEnabled=false")
 
     chromeOptions.add_argument('--ignore-certificate-errors-spki-list')
@@ -43,7 +50,8 @@ def launch_html_collection(websites, marques, input_df):
     # Turn-off userAutomationExtension 
     chromeOptions.add_experimental_option("useAutomationExtension", False) 
 
-    driver = webdriver.Chrome(service=s, options=chromeOptions)
+    driver = get_driver()
+
     driver.implicitly_wait(10)
 
     soup_df = pd.DataFrame()

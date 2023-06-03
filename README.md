@@ -60,8 +60,4 @@ Dans le fichier "params.xlsx":
 ## Lancer le programme
 
 Pour lancer l’application d’extraction des données, double-cliquer sur le fichier « launch_app.bat ».
-- Si besoin, sélectionner le dossier où sera enregistrée l’extraction Excel. Si rien est renseigné, le fichier sera enregistré par défaut dans le même dossier que le fichier « launch_app.bat »
-- Cliquer sur « Lancer l’extraction » :
-	- Une fenêtre d’invite de commande s’ouvre et affiche les sites et marques au fur et à mesure de l’extraction des données
-	- Un pop-up s’affichera lorsque l’extraction sera terminée
-	- L’extraction complète dure une vingtaine de minutes (variable sur les postes)
+- L’extraction complète dure une vingtaine de minutes (variable sur les postes et le nombre de marques)

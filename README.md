@@ -51,6 +51,12 @@ Cette étape n’est nécessaire qu’à la première utilisation uniquement.
 Télécharger et installer Google Chrome :
 https://www.google.com/chrome/?brand=YTUH&gclid=CjwKCAjwo7iiBhAEEiwAsIxQEQU8U0-rcfGsmMoe_i2WYBxOonW4akXg8AYq2d5x5Vyq_ftOWL49sBoCDJUQAvD_BwE&gclsrc=aw.ds
 
+## Mettre à jour les paramètres
+
+Dans le fichier "params.xlsx":
+- Si besoin, ajouter/modifier/supprimer des marques dans la feuille 'marques'
+- Renseigner le dossier dans lequel l'extraction des données sera enregistrée (au format .xlsx)
+
 ## Lancer le programme
 
 Pour lancer l’application d’extraction des données, double-cliquer sur le fichier « launch_app.bat ».

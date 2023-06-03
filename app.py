@@ -1,4 +1,8 @@
 import streamlit as st
+from html_collection import html_collection, prices_collection
+from params import params
+import pandas as pd
+from tqdm import tqdm
 
 """
 ## Web scraping on Streamlit Cloud with Selenium
@@ -23,8 +27,12 @@ with st.echo():
     options = Options()
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
+    options.add_argument("--disable-blink-features=AutomationControlled") 
 
     driver = get_driver()
-    driver.get("https://www.bernard.fr/")
+    
+    soup_df = pd.DataFrame()
+    soup_df = html_collection("manutan", "TORK", input_df, soup_df, driver)
+#     driver.get("https://www.bernard.fr/")
 
-    st.code(driver.page_source)
+    st.write(soup_df)

@@ -86,7 +86,7 @@ def save_data(data, path):
 if __name__ =="__main__":
 
     #Choice of websites
-    websites = ["bruneau","manutan","jpg","raja","bernard"] #"manutan","bruneau","jpg","raja","bernard"
+    websites = ["manutan","jpg","raja","bernard"] #"manutan","bruneau","jpg","raja","bernard"
 
     #Choice of brands
     marques = import_brands()

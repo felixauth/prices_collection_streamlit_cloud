@@ -1,6 +1,6 @@
 # RAJA – Extraction de données par web scraping
 
-Ce programme permet de collecter automatiquement des données pour chacune des marques et des sites ci-dessous :
+Ce programme permet de collecter automatiquement des données pour les marques souhaitées sur les sites ci-dessous :
 
 - Sites :
 	- www.manutan.fr
@@ -8,16 +8,6 @@ Ce programme permet de collecter automatiquement des données pour chacune des m
 	- www.jpg.fr
 	- www.raja.fr
 	- www.bernard.fr
-
-- Marques :
-	- Tork
-	- Jex
-	- ST Marc
-	- Harpic
-	- Ajax
-	- Rossignol
-	- Ansell
-	- Blaklader
 
 - Données collectées :
 	- Descriptif du produit

@@ -44,11 +44,21 @@ if launch_button:
     options = Options()
     options.add_argument('--disable-gpu')
     options.add_argument('--headless=new')
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    
+    options.add_argument('--ignore-certificate-errors-spki-list')
+
+    # Adding argument to disable the AutomationControlled flag 
     options.add_argument("--disable-blink-features=AutomationControlled") 
+    
+    # Exclude the collection of enable-automation switches 
+    options.add_experimental_option("excludeSwitches", ["enable-automation"]) 
+    
+    # Turn-off userAutomationExtension 
+    options.add_experimental_option("useAutomationExtension", False) 
 
     driver = get_driver()
-    driver.get("www.raja.fr")
-    st.write(driver.page_source)
+
     # Lauching the collection of data
     # driver.implicitly_wait(10)
 
@@ -62,14 +72,14 @@ if launch_button:
 
     # print("\n", "Data collection complete.")
 
-#     soup_df = html_collection("raja", 'jex', input_df, soup_df, driver)
+    soup_df = html_collection("raja", 'jex', input_df, soup_df, driver)
     
-#     st.write(soup_df)
+    st.write(soup_df)
 
-#     collect_df = prices_collection(soup_df, input_df)
+    collect_df = prices_collection(soup_df, input_df)
 
-#     # Displaying the collected data
-#     st.write(collect_df)
+    # Displaying the collected data
+    st.write(collect_df)
 
 
 

@@ -47,16 +47,16 @@ if launch_button:
     options.add_argument("--disable-blink-features=AutomationControlled") 
 
     driver = get_driver()
-    driver.get('http://www.jpg.fr')
+#     driver.get('http://www.jpg.fr')
 
-    st.code(driver.page_source)
+#     st.code(driver.page_source)
     
-#     # Lauching the collection of data
-#     soup_df = launch_html_collection(websites,marques,input_df)
-#     collect_df = prices_collection(soup_df, input_df)
+    # Lauching the collection of data
+    soup_df = launch_html_collection(websites,marques,input_df)
+    collect_df = prices_collection(soup_df, input_df)
 
-#     # Displaying the collected data
-#     st.write(collect_df)
+    # Displaying the collected data
+    st.write(collect_df)
 
 
 

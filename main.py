@@ -30,27 +30,6 @@ def launch_html_collection(websites, marques, input_df):
     
     """
 
-
-    s = Service('chromedriver.exe')
-    chromeOptions = Options()
-
-    chromeOptions.add_argument("--headless")
-    chromeOptions.add_argument("--blink-settings=imagesEnabled=false")
-
-    chromeOptions.add_argument('--ignore-certificate-errors-spki-list')
-
-    # Adding argument to disable the AutomationControlled flag 
-    chromeOptions.add_argument("--disable-blink-features=AutomationControlled") 
-    
-    # Exclude the collection of enable-automation switches 
-    chromeOptions.add_experimental_option("excludeSwitches", ["enable-automation"]) 
-    
-    # Turn-off userAutomationExtension 
-    chromeOptions.add_experimental_option("useAutomationExtension", False) 
-
-    driver = webdriver.Chrome(service=s, options=chromeOptions)
-    driver.implicitly_wait(10)
-
     soup_df = pd.DataFrame()
 
     for website in tqdm(websites):

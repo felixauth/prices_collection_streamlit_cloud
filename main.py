@@ -29,7 +29,19 @@ def launch_html_collection(websites, marques, input_df):
     A dataframe with the name of the website, name of the brand and the html content
     
     """
+    
+    # Connecting the Chrome driver
+    @st.experimental_singleton
+    def get_driver():
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
+    options = Options()
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless')
+    options.add_argument("--disable-blink-features=AutomationControlled") 
+
+    driver = get_driver()
+    
     soup_df = pd.DataFrame()
 
     for website in tqdm(websites):

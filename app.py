@@ -61,7 +61,7 @@ if launch_button:
 
     # print("\n", "Data collection complete.")
 
-    soup_df = html_collection("raja", 'jpg', input_df, soup_df, driver)
+    soup_df = html_collection("raja", 'jex', input_df, soup_df, driver)
     
     st.write(soup_df)
 

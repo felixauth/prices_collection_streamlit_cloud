@@ -49,7 +49,7 @@ if launch_button:
     driver = get_driver()
 
     # Lauching the collection of data
-    driver.implicitly_wait(10)
+    # driver.implicitly_wait(10)
 
     soup_df = pd.DataFrame()
 

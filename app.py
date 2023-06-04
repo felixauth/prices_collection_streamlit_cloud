@@ -31,25 +31,9 @@ marques = st.multiselect(
 launch_button = st.button("Lancer l'extraction des données")
 
 if launch_button:
-
     
     # Importing params
     input_df = params()
-
-    # Connecting the Chrome driver
-    @st.experimental_singleton
-    def get_driver():
-        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
-    options = Options()
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-#     options.add_argument("--disable-blink-features=AutomationControlled") 
-
-    driver = get_driver()
-#     driver.get('http://www.jpg.fr')
-
-#     st.code(driver.page_source)
     
     # Lauching the collection of data
     soup_df = launch_html_collection(websites,marques,input_df)

@@ -36,7 +36,7 @@ if launch_button:
     input_df = params()
 
     # Connecting the Chrome driver
-    @st.experimental_singleton
+    @st.cache_resource
     def get_driver():
         return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
@@ -60,6 +60,8 @@ if launch_button:
             print("\n", f"------{marque} information collected", "\n")
 
     print("\n", "Data collection complete.")
+    
+    st.write(soup_df)
 
     collect_df = prices_collection(soup_df, input_df)
 

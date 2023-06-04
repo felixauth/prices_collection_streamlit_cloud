@@ -11,7 +11,7 @@ import os
 from tqdm import tqdm
 from datetime import date
 import streamlit as st
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 

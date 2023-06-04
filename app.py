@@ -53,13 +53,15 @@ if launch_button:
 
     soup_df = pd.DataFrame()
 
-    for website in tqdm(websites):
-        print("\n", f"---------------------- Extracting data from {website.upper()} -------------------------", "\n")
-        for marque in marques :
-            soup_df = html_collection(website, marque, input_df, soup_df, driver)
-            print("\n", f"------{marque} information collected", "\n")
+    # for website in tqdm(websites):
+    #     print("\n", f"---------------------- Extracting data from {website.upper()} -------------------------", "\n")
+    #     for marque in marques :
+    #         soup_df = html_collection(website, marque, input_df, soup_df, driver)
+    #         print("\n", f"------{marque} information collected", "\n")
 
-    print("\n", "Data collection complete.")
+    # print("\n", "Data collection complete.")
+
+    soup_df = html_collection("raja", 'jpg', input_df, soup_df, driver)
     
     st.write(soup_df)
 

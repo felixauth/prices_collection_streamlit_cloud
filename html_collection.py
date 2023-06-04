@@ -5,6 +5,8 @@ import time
 import re
 from selenium.common.exceptions import NoSuchElementException
 from utils import clean_prices
+from datetime import date
+
 
 
 def html_collection(website, marque, input_df, soup_df, driver):
@@ -30,7 +32,7 @@ def html_collection(website, marque, input_df, soup_df, driver):
 
     #Manutan works with paging, while the other work with loadmore button, so we need to precise that we want the page 0
     if website == "manutan":
-        marque = marque.replace(" ","+")
+        marque = marque.replace("%20","-").lower()
         query=input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, max_product=0)
     elif website == "bruneau":
         query=input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, num_page=1)
@@ -39,6 +41,7 @@ def html_collection(website, marque, input_df, soup_df, driver):
 
     #Opening web page
     driver.get(query)
+    
 
     #Clicking on the accept cookies button if any
     try:
@@ -46,6 +49,8 @@ def html_collection(website, marque, input_df, soup_df, driver):
     except NoSuchElementException:
         pass
     
+    time.sleep(5)
+
     #Closing the promotion window for bruneau, if any
     if website == "bruneau":
         try:
@@ -59,14 +64,18 @@ def html_collection(website, marque, input_df, soup_df, driver):
         html_by_page = []
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         html_by_page.append(soup)
-        match_html = re.search(r'sur\s+(\d+)', soup.find("span",class_="num_products").text)
+        match_html = re.search(r'sur(.*?)\)', soup.find("span",class_="num_products").text)
+        print(match_html)
         if match_html:
             # match = re.search(r'sur\s+(\d+)', match_html.text)
-            nb_products = int(match_html.group(1))
+            nb_products = int(match_html.group(1).replace('\xa0','').replace(' ',''))
             nb_pages = int(nb_products / 28) + 1
+            print(nb_products)
             for nb_page in range(1,nb_pages):
                 query = input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, max_product=nb_page * 28)    
                 driver.get(query)
+                driver.refresh()
+                time.sleep(5)
                 try:
                     driver.find_element(By.XPATH,input_df.loc[input_df["website"]==website,"xpath_cookies_accept"].values[0]).click()
                 except:
@@ -94,6 +103,7 @@ def html_collection(website, marque, input_df, soup_df, driver):
                 for nb_page in range(2,nb_pages + 1):
                     query = input_df.loc[input_df["website"]==website,"url"].values[0].format(marque_field = marque, num_page=nb_page)    
                     driver.get(query)
+                    
                     try:
                         driver.find_element(By.XPATH,input_df.loc[input_df["website"]==website,"xpath_cookies_accept"].values[0]).click()
                     except NoSuchElementException:
@@ -185,19 +195,28 @@ def prices_collection(soup_df, input_df):
             product_prices = [price.text for price in results_prices]
 
             #Collecting and storing data into a dataframe, if data found
-            if (len(product_names) == 0) | (len(product_ref) == 0) | (len(product_prices) == 0):
+            if (len(product_names)!=len(product_ref)) or (len(product_names)!=len(product_prices)) or (len(product_ref)!=len(product_prices)):
                 pass
+
             else:
-                results_marque_df = pd.DataFrame({"Site": website,
-                                    "Marque": marque,
+
+                # Getting current date  
+                today = date.today().strftime("%Y-%m-%d")
+
+                # Generating df with collected data
+                results_marque_df = pd.DataFrame({
+                                    "Date_extraction": today,
+                                    "Site": website,
+                                    "Marque": marque.replace("%20"," "),
                                     "Produit": product_names,
                                     "Référence": product_ref,
                                     "Prix": product_prices})
+                #Price formating
+                results_marque_df["Prix"] = results_marque_df["Prix"].apply(lambda x : clean_prices(x))
+                results_marque_df["Prix"] = round(pd.to_numeric(results_marque_df["Prix"]),2)
+
+                #Concatenation of data
                 results_df = pd.concat([results_df,results_marque_df])
                 results_df.reset_index(drop=True,inplace=True)
-
-    #Price formating
-    results_df["Prix"] = results_df["Prix"].apply(lambda x : clean_prices(x))
-    results_df["Prix"] = round(pd.to_numeric(results_df["Prix"]),2)
 
     return results_df

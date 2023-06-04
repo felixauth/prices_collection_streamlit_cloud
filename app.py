@@ -1,11 +1,16 @@
 import streamlit as st
-from html_collection import html_collection, prices_collection
+from html_collection import prices_collection
+from main import launch_html_collection
 from params import params
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
-from tqdm import tqdm
+from datetime import date
 
 """
-## Web scraping on Streamlit Cloud with Selenium
+## Collecte de données via web scraping - RAJA
 
 [![Source](https://img.shields.io/badge/View-Source-<COLOR>.svg)](https://github.com/snehankekre/streamlit-selenium-chrome/)
 
@@ -14,27 +19,42 @@ This is a minimal, reproducible example of how to scrape the web with Selenium a
 Fork this repo, and edit `/streamlit_app.py` to customize this app to your heart's desire. :heart:
 """
 
-with st.echo():
-    from selenium import webdriver
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
+# Connecting the Chrome driver
+@st.cache_resource
+def get_driver():
+    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    @st.experimental_singleton
-    def get_driver():
-        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+options = Options()
+options.add_argument('--disable-gpu')
+# options.add_argument('--headless')
+options.add_argument("--disable-blink-features=AutomationControlled") 
 
-    options = Options()
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-    options.add_argument("--disable-blink-features=AutomationControlled") 
+driver = get_driver()
 
-    driver = get_driver()
-    
-    soup_df = pd.DataFrame()
-    input_df = params()
+# Importing params
+input_df = params()
 
-    soup_df = html_collection("manutan", "TORK", input_df, soup_df, driver)
-#     driver.get("https://www.bernard.fr/")
+# Selecting the websites and brands to scrap
+websites = st.multiselect(
+    label='Sélectionner les sites souhaités :',
+    options = ['manutan', 'jpg','bernard','raja','bruneau'],
+    default=['manutan', 'jpg','bernard','raja','bruneau'])
 
-    st.write(soup_df)
+marques = st.multiselect(
+    label='Sélectionner les marques souhaitées :',
+    options = ['TORK', 'JEX','ST MARC','HARPIC', 'AJAX','ROSSIGNOL','ANSELL','BLAKLADER'],
+    default=['TORK', 'JEX','ST MARC','HARPIC', 'AJAX','ROSSIGNOL','ANSELL','BLAKLADER'])
+
+launch_button = st.button("Lancer l'extraction des données")
+
+if launch_button:
+
+    # Lauching the collection of data
+    soup_df = launch_html_collection(websites,marques,input_df)
+    collect_df = prices_collection(soup_df, input_df)
+
+    # Displaying the collected data
+    st.write(collect_df)
+
+
+

@@ -12,27 +12,10 @@ from datetime import date
 """
 ## Collecte de données via web scraping - RAJA
 
-[![Source](https://img.shields.io/badge/View-Source-<COLOR>.svg)](https://github.com/snehankekre/streamlit-selenium-chrome/)
+[![Source](https://img.shields.io/badge/View-Source-<COLOR>.svg)]
 
-This is a minimal, reproducible example of how to scrape the web with Selenium and Chrome on Streamlit's Community Cloud.
-
-Fork this repo, and edit `/streamlit_app.py` to customize this app to your heart's desire. :heart:
 """
 
-# Connecting the Chrome driver
-@st.cache_resource
-def get_driver():
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
-options = Options()
-options.add_argument('--disable-gpu')
-# options.add_argument('--headless')
-options.add_argument("--disable-blink-features=AutomationControlled") 
-
-driver = get_driver()
-
-# Importing params
-input_df = params()
 
 # Selecting the websites and brands to scrap
 websites = st.multiselect(
@@ -48,6 +31,22 @@ marques = st.multiselect(
 launch_button = st.button("Lancer l'extraction des données")
 
 if launch_button:
+
+    
+    # Importing params
+    input_df = params()
+
+    # Connecting the Chrome driver
+    @st.experimental_singleton
+    def get_driver():
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    options = Options()
+    options.add_argument('--disable-gpu')
+    # options.add_argument('--headless')
+    options.add_argument("--disable-blink-features=AutomationControlled") 
+
+    driver = get_driver()
 
     # Lauching the collection of data
     soup_df = launch_html_collection(websites,marques,input_df)

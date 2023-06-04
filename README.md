@@ -1,6 +1,6 @@
 # RAJA – Extraction de données par web scraping
 
-Ce programme permet de collecter automatiquement des données pour les marques souhaitées sur les sites ci-dessous :
+Ce programme permet de collecter automatiquement des données pour chacune des marques et des sites ci-dessous :
 
 - Sites :
 	- www.manutan.fr
@@ -8,6 +8,16 @@ Ce programme permet de collecter automatiquement des données pour les marques s
 	- www.jpg.fr
 	- www.raja.fr
 	- www.bernard.fr
+
+- Marques :
+	- Tork
+	- Jex
+	- ST Marc
+	- Harpic
+	- Ajax
+	- Rossignol
+	- Ansell
+	- Blaklader
 
 - Données collectées :
 	- Descriptif du produit
@@ -41,13 +51,11 @@ Cette étape n’est nécessaire qu’à la première utilisation uniquement.
 Télécharger et installer Google Chrome :
 https://www.google.com/chrome/?brand=YTUH&gclid=CjwKCAjwo7iiBhAEEiwAsIxQEQU8U0-rcfGsmMoe_i2WYBxOonW4akXg8AYq2d5x5Vyq_ftOWL49sBoCDJUQAvD_BwE&gclsrc=aw.ds
 
-## Mettre à jour les paramètres
-
-Dans le fichier "params.xlsx":
-- Si besoin, ajouter/modifier/supprimer des marques dans la feuille 'marques'
-- Renseigner le dossier dans lequel l'extraction des données sera enregistrée (au format .xlsx)
-
 ## Lancer le programme
 
 Pour lancer l’application d’extraction des données, double-cliquer sur le fichier « launch_app.bat ».
-- L’extraction complète dure une vingtaine de minutes (variable sur les postes et le nombre de marques)
+- Si besoin, sélectionner le dossier où sera enregistrée l’extraction Excel. Si rien est renseigné, le fichier sera enregistré par défaut dans le même dossier que le fichier « launch_app.bat »
+- Cliquer sur « Lancer l’extraction » :
+	- Une fenêtre d’invite de commande s’ouvre et affiche les sites et marques au fur et à mesure de l’extraction des données
+	- Un pop-up s’affichera lorsque l’extraction sera terminée
+	- L’extraction complète dure une vingtaine de minutes (variable sur les postes)

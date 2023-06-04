@@ -47,7 +47,8 @@ if launch_button:
     options.add_argument("--disable-blink-features=AutomationControlled") 
 
     driver = get_driver()
-
+    driver.get("www.raja.fr")
+    st.write(driver.page_source)
     # Lauching the collection of data
     # driver.implicitly_wait(10)
 
@@ -61,14 +62,14 @@ if launch_button:
 
     # print("\n", "Data collection complete.")
 
-    soup_df = html_collection("raja", 'jex', input_df, soup_df, driver)
+#     soup_df = html_collection("raja", 'jex', input_df, soup_df, driver)
     
-    st.write(soup_df)
+#     st.write(soup_df)
 
-    collect_df = prices_collection(soup_df, input_df)
+#     collect_df = prices_collection(soup_df, input_df)
 
-    # Displaying the collected data
-    st.write(collect_df)
+#     # Displaying the collected data
+#     st.write(collect_df)
 
 
 
